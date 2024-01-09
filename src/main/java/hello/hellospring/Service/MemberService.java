@@ -9,7 +9,13 @@ import java.util.Optional;
 
 public class MemberService {
 
-    private final MemberRepository memberRepository = new MemoryMemberRepository();
+//    private final MemberRepository memberRepository = new MemoryMemberRepository();
+    private final MemberRepository memberRepository;
+
+    // memberService 입장에서 DI. 의존성 주입
+    public MemberService(MemberRepository memberRepository){
+        this.memberRepository = memberRepository;
+    }
 
     /*
     * 회원가입
@@ -33,7 +39,7 @@ public class MemberService {
         // findByName 뒤에 쭉 나오기에 메소드로 뽑아서 사용하는 것이 좋음
         memberRepository.findByName(member.getName())
                 .ifPresent(m->{
-                    throw new IllegalArgumentException("이미 존재하는 회원입니다.");
+                    throw new IllegalStateException("이미 존재하는 회원입니다.");
                 });
 
         /*
